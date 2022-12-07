@@ -1,0 +1,118 @@
+#include<iostream>
+#include<stack>
+using namespace std;
+class SinglyLinkedListNode {
+public:
+	int data;
+	SinglyLinkedListNode* next;
+
+	SinglyLinkedListNode(int node_data) {
+		this->data = node_data;
+		this->next = nullptr;
+	}
+};
+
+class SinglyLinkedList {
+public:
+	SinglyLinkedListNode* head;
+	SinglyLinkedListNode* tail;
+
+	SinglyLinkedList() {
+		this->head = nullptr;
+		this->tail = nullptr;
+	}
+	void print_singly_linked_list(SinglyLinkedListNode* node) {
+		while (node) {
+			cout << node->data;
+			node = node->next;
+		}
+	}
+
+	void insert_node(int node_data) {
+		SinglyLinkedListNode* node = new SinglyLinkedListNode(node_data);
+
+		if (!this->head) {
+			this->head = node;
+		}
+		else {
+			this->tail->next = node;
+		}
+
+		this->tail = node;
+	}
+};
+
+
+
+void free_singly_linked_list(SinglyLinkedListNode* node) {
+	while (node) {
+		SinglyLinkedListNode* temp = node;
+		node = node->next;
+
+
+		free(temp);
+	}
+}
+
+SinglyLinkedListNode* insertNodeAtPosition(SinglyLinkedListNode* llist, int data, int position) {
+	if (llist == nullptr) {
+		llist = new SinglyLinkedListNode(data);
+		llist->data = data;
+		llist->next = nullptr;
+		return llist;
+	}
+	SinglyLinkedListNode* temp = llist;
+	SinglyLinkedListNode* pre_last=temp;
+	int i=0;
+	while(1){
+		if (i == position) {
+			SinglyLinkedListNode *newNode = new SinglyLinkedListNode(data);
+			newNode->next = temp;
+			pre_last->next = newNode;
+			break;
+		}
+		pre_last = temp;
+		temp = temp->next;
+		i++;
+	}
+	return llist;
+	
+}
+
+
+SinglyLinkedListNode* reverse(SinglyLinkedListNode* llist) {
+	SinglyLinkedListNode* temp = llist;
+	stack<int>s;
+	while (temp != nullptr) {
+		s.push(temp->data);
+		temp = temp->next;
+	}
+	
+	SinglyLinkedListNode *newNode = new SinglyLinkedListNode(s.top());
+	temp = newNode;
+	llist = temp;
+	s.pop();
+	while (!s.empty()) {
+		SinglyLinkedListNode* newestNode = new SinglyLinkedListNode(s.top());
+		temp->next = newestNode;
+		temp = temp->next;
+		s.pop();
+	}
+	return llist;
+
+}
+int main() {
+	SinglyLinkedList *llist = new SinglyLinkedList();
+	llist->insert_node(1);
+	llist->insert_node(2);
+	llist->insert_node(3);
+	llist->insert_node(4);
+	llist->insert_node(5);
+	llist->head = insertNodeAtPosition(llist->head, 9, 2);
+	llist->head = reverse(llist->head);
+
+	llist->print_singly_linked_list(llist->head);
+
+	
+	return 0;
+}
